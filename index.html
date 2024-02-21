@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+				overflow: hidden;
+      }
+      html, body {
+        height: 100%;
+      }
+      canvas {
+        display: block;
+      }
+      .logo{position:absolute;bottom:16px;right:16px;width:32px;height:32px;z-index:2;background-image:url(https://app.spline.design/_assets/_icons/icon_favicon32x32.png);background-size:cover;}.logo:hover{opacity:0.8;}
+   
+      #textFloat{
+        animation: fadeIn 5s linear forwards;
+      }
+      @keyframes fadeIn{
+        0%{
+          opacity: 0%;
+        }
+        100%{
+          opacity: 100%;
+        }
+      }
+      @keyframes reset{
+        0%{
+          opacity: 0%;
+        }
+        100%{
+          opacity: 0%;
+        }
+      }
+   
+   </style>
+  </head>
+  <body>
+    <div id="textFloat" style = "position:fixed; top: 20px; left: 10px;">
+      <H1>This is Naked Baby Man</H1>
+      <p>Is he a naked man or a baby?</p>
+      <button onclick="lightsOff()"> LightsOff!</button>
+      <button onclick="buttonClicked()">My Cane!</button>
+   </div>
+    
+    <canvas id="canvas3d"></canvas>
+    <a class="logo" href="https://spline.design"></a>
+
+    <script type="module">
+      import { Application } from './runtime.js';
+      //import { Application } from './@splinetool/runtime/build/runtime.js';
+      const canvas = document.getElementById('canvas3d');
+const app = new Application(canvas);
+app.load('https://prod.spline.design/Ph3tEq9iwVPU6blM/scene.splinecode').then(() => {
+		
+    
+    const obj = app.findObjectByName('Cube');
+    const cane = app.findObjectByName('Path');
+    const sparks = app.findObjectByName('Sparks');
+    const cam = app.findObjectByName('Camera');
+    let lights = false;
+    let buttCamCreated = false;
+
+    //console.log(app.getSplineEvents());
+    //console.log(app.effects);
+    cane.visible = !cane.visible;
+     sparks.visible = !sparks.visible;
+    
+
+		console.log(obj); // Spline Object => { name: 'Cube', id: '7AF5EBC0-09BB-4720-B045-F478F8053AA4', position: {}, ... }
+   window.flipCam=()=>{
+    cam.emitEvent('mouseDown');
+   }
+    window.lightsOff=()=>{
+      if (lights){
+        app.setBackgroundColor('#ffffff');
+      }
+      else{
+        app.setBackgroundColor('#000000');
+      }
+      lights = !lights;
+    }
+    window.buttonClicked=()=>{ 
+      //cane.emitEvent('mouseDown');
+     // cane.rotation.y += .5;
+     cane.visible = !cane.visible;
+     sparks.visible = !sparks.visible;
+      // functions need to be passed like this because its a module and not a script
+    }
+		// move the object in 3D space
+		//obj.position.x += 10;
+    //app.emitEvent('mouseHover', 'Cube');
+
+    window.addButtCamButton=()=>
+    {
+      var newButton = document.createElement("button");
+        newButton.innerHTML = "Butt Cam View";
+        newButton.onclick = window.flipCam; 
+        document.getElementById('textFloat').appendChild(newButton);
+        buttCamCreated= true;
+    }
+
+    app.addEventListener('mouseDown', (e) => {
+      if (e.target.name == 'Path')
+        {
+         if(!buttCamCreated) {addButtCamButton();}
+				  console.log('I have been clicked!');
+        }
+		});
+
+	});
+    </script>
+   
+    
+  </body>
+</html>
+  
